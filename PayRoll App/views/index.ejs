@@ -1,86 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard</title>
+  <title>Employee Payroll</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<h1>📊 Employee Payroll Dashboard</h1>
-
-<div class="dashboard-cards">
-  <div class="card">
-    <h3>Total Employees</h3>
-    <p><%= totalEmployees %></p>
-  </div>
-
-  <div class="card">
-    <h3>Total Salary</h3>
-    <p>₹ <%= totalSalary %></p>
-  </div>
-
-  <div class="card">
-    <h3>Total Tax (10%)</h3>
-    <p>₹ <%= totalTax %></p>
-  </div>
-
-  <div class="card">
-    <h3>Total Net Salary</h3>
-    <p>₹ <%= totalNet %></p>
-  </div>
+<div class="navbar">
+  EMPLOYEE PAYROLL
 </div>
 
-<div class="container">
+<div class="main-container">
 
-  <div class="top-bar">
-    <a href="/add" class="add-btn">➕ Add Employee</a>
-    <input type="text" id="searchInput" placeholder="Search employee...">
+  <div class="header-row">
+    <h2>Employee Details</h2>
+    <a href="/add" class="add-btn">+ Add User</a>
   </div>
 
-  <table id="employeeTable">
-    <tr>
-      <th>Name</th>
-      <th>Department</th>
-      <th>Basic Salary</th>
-      <th>Tax</th>
-      <th>Net Salary</th>
-      <th>Actions</th>
-    </tr>
+  <div class="cards">
+    <div class="card">
+      <p>Total Employees</p>
+      <h3><%= totalEmployees %></h3>
+    </div>
 
-    <% employees.forEach(emp => { 
-        const tax = emp.salary * 0.10;
-        const net = emp.salary - tax;
-    %>
-    <tr>
-      <td><%= emp.name %></td>
-      <td><%= emp.department %></td>
-      <td>₹ <%= emp.salary %></td>
-      <td>₹ <%= tax %></td>
-      <td>₹ <%= net %></td>
-      <td>
-        <a href="/edit/<%= emp.id %>" class="edit-btn">Edit</a>
-        <a href="/delete/<%= emp.id %>" class="delete-btn">Delete</a>
-      </td>
-    </tr>
-    <% }) %>
+    <div class="card">
+      <p>Total Salary</p>
+      <h3>₹ <%= totalSalary %></h3>
+    </div>
 
-  </table>
+    <div class="card">
+      <p>Total Tax (10%)</p>
+      <h3>₹ <%= totalTax %></h3>
+    </div>
+
+    <div class="card">
+      <p>Total Net Salary</p>
+      <h3>₹ <%= totalNet %></h3>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Department</th>
+          <th>Salary</th>
+          <th>Tax</th>
+          <th>Net Salary</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% employees.forEach(emp => { 
+          const tax = emp.salary * 0.10;
+          const net = emp.salary - tax;
+        %>
+        <tr>
+          <td><%= emp.name %></td>
+          <td><%= emp.department %></td>
+          <td>₹ <%= emp.salary %></td>
+          <td>₹ <%= tax %></td>
+          <td>₹ <%= net %></td>
+          <td>
+            <a href="/edit/<%= emp.id %>" class="edit-btn">Edit</a>
+            <a href="/delete/<%= emp.id %>" class="delete-btn">Delete</a>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 
 </div>
-
-<script>
-  const searchInput = document.getElementById("searchInput");
-  searchInput.addEventListener("keyup", function () {
-    const filter = searchInput.value.toLowerCase();
-    const rows = document.querySelectorAll("#employeeTable tr");
-
-    rows.forEach((row, index) => {
-      if (index === 0) return;
-      const text = row.innerText.toLowerCase();
-      row.style.display = text.includes(filter) ? "" : "none";
-    });
-  });
-</script>
 
 </body>
 </html>

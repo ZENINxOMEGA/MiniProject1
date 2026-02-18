@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const fileHandler = require("./modules/fileHandler");
 
 const app = express();
@@ -6,8 +7,11 @@ const PORT = 8000;
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public"))); // ✅ important
+
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 
 // ================= DASHBOARD =================
@@ -26,11 +30,11 @@ app.get("/", async (req, res) => {
   });
 
   res.render("index", {
-    employees: employees,
+    employees,
     totalEmployees: employees.length,
-    totalSalary: totalSalary,
-    totalTax: totalTax,
-    totalNet: totalNet
+    totalSalary,
+    totalTax,
+    totalNet
   });
 });
 
@@ -52,7 +56,6 @@ app.post("/add", async (req, res) => {
     salary: Number(req.body.salary)
   };
 
-  // Validation
   if (!newEmployee.name || newEmployee.salary < 0) {
     return res.redirect("/");
   }
@@ -67,11 +70,8 @@ app.post("/add", async (req, res) => {
 // ================= DELETE =================
 app.get("/delete/:id", async (req, res) => {
   let employees = await fileHandler.readData();
-
   employees = employees.filter(emp => emp.id != req.params.id);
-
   await fileHandler.writeData(employees);
-
   res.redirect("/");
 });
 
@@ -79,22 +79,17 @@ app.get("/delete/:id", async (req, res) => {
 // ================= EDIT PAGE =================
 app.get("/edit/:id", async (req, res) => {
   const employees = await fileHandler.readData();
-
   const employee = employees.find(emp => emp.id == req.params.id);
-
   res.render("edit", { employee });
 });
 
 
-// ================= UPDATE EMPLOYEE =================
+// ================= UPDATE =================
 app.post("/edit/:id", async (req, res) => {
   const employees = await fileHandler.readData();
-
   const index = employees.findIndex(emp => emp.id == req.params.id);
 
-  if (index === -1) {
-    return res.redirect("/");
-  }
+  if (index === -1) return res.redirect("/");
 
   employees[index] = {
     id: employees[index].id,
@@ -104,12 +99,10 @@ app.post("/edit/:id", async (req, res) => {
   };
 
   await fileHandler.writeData(employees);
-
   res.redirect("/");
 });
 
 
-// ================= SERVER START =================
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
