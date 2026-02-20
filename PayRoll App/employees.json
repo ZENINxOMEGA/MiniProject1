@@ -1,8 +1,26 @@
 [
   {
-    "id": 1771407600889,
+    "id": 1771565684850,
     "name": "Aniket Sharma",
-    "department": "Esports",
-    "salary": 1000000
+    "department": "IT",
+    "salary": 200000
+  },
+  {
+    "id": 1771567044952,
+    "name": "Ishendra Rai",
+    "department": "IT",
+    "salary": 200000
+  },
+  {
+    "id": 1771567068249,
+    "name": "Utkarsh Pathak",
+    "department": "IT",
+    "salary": 200000
+  },
+  {
+    "id": 1771567102591,
+    "name": "Aryan Kumar Mishra",
+    "department": "IT",
+    "salary": 100000
   }
 ]
